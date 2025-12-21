@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background-color: #0b0f13;
+  }
+
+  body {
+    @apply text-gray-100 antialiased;
+    background-color: #0b0f13;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  * {
+    @apply border-gray-800;
+  }
+}
+
+@layer utilities {
+  .accent {
+    color: #58d68d;
+  }
+
+  .accent-bg {
+    background-color: #58d68d;
+  }
+
+  .section-padding {
+    @apply py-16 md:py-24;
+  }
+
+  .section-heading {
+    @apply text-sm uppercase tracking-[0.3em] text-gray-400;
+  }
+
+  .card-base {
+    @apply border border-gray-800 bg-[#11161d] p-6 rounded-xl;
+  }
+
+  .card-muted {
+    @apply border border-gray-800 bg-[#0f141a];
+  }
+
+  .link-inline {
+    @apply inline-flex items-center gap-1 text-sm font-medium text-gray-200;
+  }
+
+  .link-inline:hover {
+    color: #58d68d;
+  }
+}
+
+
+/* ---------------- Custom Scrollbar ---------------- */
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0b0f13;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    #4f7dff,
+    #7c5cff
+  );
+  border-radius: 999px;
+  border: 2px solid #0b0f13;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    #5a86ff,
+    #8a6bff
+  );
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #5a86ff #0b0f13;
+}
