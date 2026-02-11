@@ -87,3 +87,8 @@
   scrollbar-width: thin;
   scrollbar-color: #5a86ff #0b0f13;
 }
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100%;
+}

@@ -26,7 +26,7 @@ export default function Skills() {
       {/* Ambient glow — same system language */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-600/6 via-transparent to-transparent pointer-events-none" />
 
-      <div className="relative max-w-[1400px] mx-auto px-10 pt-24 pb-20">
+<div className="relative max-w-[1400px] mx-auto px-10 pt-24 pb-20 overflow-hidden">
         {/* HEADER */}
         <div className="max-w-2xl mb-14">
           <p className="text-sm font-medium text-purple-400 mb-3">
@@ -43,9 +43,29 @@ export default function Skills() {
           </p>
         </div>
 
-        {/* TEAM FIT GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* CARD 01 */}
+{/* TEAM FIT GRID WITH RAIL */}
+<div className="relative">
+
+  {/* Intelligence Rail */}
+  <motion.div
+    initial={{ opacity: 0, height: 0 }}
+    whileInView={{ opacity: 1, height: '100%' }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.6, ease: 'easeOut' }}
+    className="
+      absolute left-0 top-0
+      w-[2px] h-full
+      bg-gradient-to-b
+      from-purple-500/70
+      via-purple-500/30
+      to-transparent
+      rounded-full
+    "
+  />
+
+  {/* Cards */}
+  <div className="relative grid grid-cols-1 md:grid-cols-3 gap-8 pl-10">
+{/* CARD 01 */}
           <motion.article
             variants={cardVariants}
             initial="rest"
@@ -150,7 +170,7 @@ export default function Skills() {
             </p>
           </motion.article>
         </div>
-
+          </div>
         {/* OPERATING MODE */}
         <div className="mt-14 max-w-3xl">
           <p className="text-xs uppercase tracking-wider text-gray-500 mb-3">
@@ -158,7 +178,47 @@ export default function Skills() {
           </p>
 
           <div className="relative pl-6 py-4 rounded-lg bg-white/[0.025]">
-            <span className="absolute left-0 top-4 h-[70%] w-[2px] bg-purple-500/40 rounded-full" />
+{/* Core rail */}
+<motion.span
+  animate={{
+    opacity: [0.5, 1, 0.5],
+  }}
+  transition={{
+    duration: 3,
+    repeat: Infinity,
+    ease: 'easeInOut',
+  }}
+  className="
+    absolute left-0 top-3
+    h-[75%] w-[2px]
+    bg-gradient-to-b
+    from-purple-500
+    via-purple-500/50
+    to-transparent
+    rounded-full
+  "
+/>
+
+{/* Glow halo */}
+<motion.span
+  animate={{
+    opacity: [0.2, 0.4, 0.2],
+    scale: [1, 1.12, 1],
+  }}
+  transition={{
+    duration: 3,
+    repeat: Infinity,
+    ease: 'easeInOut',
+  }}
+  className="
+    absolute left-[-8px] top-3
+    h-[75%] w-[18px]
+    bg-purple-500/25
+    blur-[16px]
+    rounded-full
+  "
+/>
+
 
             <p className="text-gray-300 leading-relaxed">
               I adapt to team norms, respect existing systems, and contribute
@@ -167,6 +227,7 @@ export default function Skills() {
             </p>
           </div>
         </div>
+      
       </div>
     </section>
   )

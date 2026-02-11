@@ -7,18 +7,61 @@ const inter = Inter({
 })
 
 export const metadata = {
-  title: 'Vishnurat Kadagadakai — Front-End Engineer',
+  title: {
+    default: 'Vishnurat Kadagadakai — Front-End Engineer',
+    template: '%s · Vishnurat Kadagadakai',
+  },
+
   description:
-    'Front-end engineer specializing in scalable UI systems, interaction design, and production-grade web applications.',
-  metadataBase: new URL('https://yourdomain.com'),
+    'Front-end engineer building production-grade UI systems, scalable interfaces, and high-performance web applications with React and Next.js.',
+
+  metadataBase: new URL('https://vishnurat-kadagadakai.vercel.app'),
+
+  /* ---------- ICONS ---------- */
+
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
+  },
+
+  /* ---------- OPEN GRAPH ---------- */
+
+  openGraph: {
+    title: 'Vishnurat Kadagadakai — Front-End Engineer',
+    description:
+      'Production-focused front-end engineer specializing in scalable UI systems and interaction design.',
+
+    url: 'https://vishnurat-kadagadakai.vercel.app',
+    siteName: 'Vishnurat Portfolio',
+
+    images: ['/og-image.png'],
+
+    locale: 'en_US',
+    type: 'website',
+  },
+
+  /* ---------- TWITTER ---------- */
+
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Vishnurat Kadagadakai — Front-End Engineer',
+    description:
+      'Production-focused front-end engineer building scalable UI systems.',
+
+    images: ['/og-image.png'],
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+  },
 }
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className="bg-[#0b0f13]">
-      <body
-        className={`${inter.className} antialiased text-gray-100`}
-      >
+      <body className={`${inter.className} antialiased text-gray-100`}>
         {children}
       </body>
     </html>

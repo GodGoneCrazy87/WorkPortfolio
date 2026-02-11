@@ -117,9 +117,8 @@ export default function Projects() {
         {/* GRID */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
           {projects.map((project) => (
-            <motion.article
-              key={project.slug}
-              whileHover={{ scale: 1.05 }}
+<motion.article
+              whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.25, ease: 'easeOut' }}
               onClick={() => router.push(`/case-studies/${project.slug}`)}
               className="

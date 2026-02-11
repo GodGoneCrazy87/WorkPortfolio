@@ -195,7 +195,28 @@ export default function About() {
             rounded-lg
             bg-white/[0.03]
           ">
-            <span className="absolute left-0 top-4 h-[70%] w-[2px] bg-purple-500/50 rounded-full" />
+<span
+  className="
+    absolute left-0 top-2
+    h-[80%] w-[2px]
+    bg-gradient-to-b
+    from-purple-500/80
+    via-purple-500/40
+    to-transparent
+    rounded-full
+    blur-[0.3px]
+  "
+/>
+
+<span
+  className="
+    absolute left-[-6px] top-2
+    h-[80%] w-[14px]
+    bg-purple-500/20
+    blur-[14px]
+    rounded-full
+  "
+/>
 
             <p className="text-gray-200 leading-relaxed">
               I optimize for long-term clarity — systems that teams can

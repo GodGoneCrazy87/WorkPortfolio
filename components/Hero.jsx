@@ -60,7 +60,7 @@ export default function Hero() {
     >
       {/* Ambient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-600/5 via-transparent to-transparent pointer-events-none" />
-
+      
       <div
         className="
           relative max-w-[1400px] mx-auto
@@ -91,14 +91,14 @@ export default function Hero() {
 
           {/* DESCRIPTION */}
           <p className="text-base sm:text-lg text-gray-400 leading-relaxed mb-6 max-w-[520px]">
-            I build production-grade, user-focused web applications by designing
-            performant front-end systems with React and Next.js — balancing
-            usability, scalability, and long-term maintainability.
+I design and build front-end systems that stay maintainable under real
+product pressure — using React and Next.js to balance usability,
+performance, and long-term clarity.
           </p>
 
           {/* SLIDING PROOF */}
           <div className="min-h-[44px] mb-8 overflow-hidden flex items-start gap-3">
-            <span className="mt-1 h-4 w-[2px] bg-purple-500/60 rounded-full shrink-0" />
+            <span className="mt-1 h-4 w-[2px]  bg-gradient-to-b from-purple-500/70 via-purple-500/30 to-transparent rounded-full shrink-0" />
 
             <AnimatePresence mode="wait">
               <motion.p

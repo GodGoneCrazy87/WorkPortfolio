@@ -84,7 +84,28 @@ export default function TechStack() {
         </div>
 
         {/* GRID */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+{/* GRID WITH RAIL */}
+<div className="relative">
+
+  {/* Capability Rail */}
+  <motion.div
+    initial={{ opacity: 0, height: 0 }}
+    whileInView={{ opacity: 1, height: '100%' }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.6, ease: 'easeOut' }}
+    className="
+      absolute left-0 top-0
+      w-[2px] h-full
+      bg-gradient-to-b
+      from-purple-500/70
+      via-purple-500/30
+      to-transparent
+      rounded-full
+    "
+  />
+
+  {/* Cards */}
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 pl-8">
           {capabilities.map((group) => (
             <motion.article
               key={group.title}
@@ -152,6 +173,7 @@ export default function TechStack() {
             </motion.article>
           ))}
         </div>
+        </div>
 
         {/* OPERATING SIGNALS */}
         <div className="mt-20 max-w-3xl">
@@ -160,7 +182,18 @@ export default function TechStack() {
           </p>
 
           <div className="relative pl-6 space-y-3">
-            <span className="absolute left-0 top-1 h-full w-[2px] bg-purple-500/40 rounded-full" />
+{/* Operating Rail */}
+<span
+  className="
+    absolute left-0 top-1
+    h-full w-[2px]
+    bg-gradient-to-b
+    from-purple-500/70
+    via-purple-500/40
+    to-transparent
+    rounded-full
+  "
+/>
 
             {[
               'I build systems meant to be maintained, not demoed.',
@@ -175,6 +208,7 @@ export default function TechStack() {
                 {line}
               </p>
             ))}
+            
           </div>
         </div>
       </div>

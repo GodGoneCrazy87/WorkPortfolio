@@ -4,14 +4,13 @@ export default function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="border-t border-gray-800 py-12">
-      <div className="max-w-6xl mx-auto px-4 flex flex-col gap-3 text-sm text-gray-500">
+    <footer className="border-t border-gray-800 py-10">
+      <div className="max-w-[1400px] mx-auto px-6 text-center text-sm text-gray-500">
+
         <p>
-          © {year} Vishnurat Kadagadakai.
+          © {year} Vishnurat Kadagadakai · Designed and built with long-term systems in mind
         </p>
-        <p>
-          Designed and engineered as a production-focused frontend system.
-        </p>
+
       </div>
     </footer>
   )
