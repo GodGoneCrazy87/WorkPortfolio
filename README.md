@@ -1,85 +1,51 @@
-# Portfolio Website
+# WorkPortfolio — Frontend & UI Systems
 
-A modern, responsive portfolio website built with Next.js, Tailwind CSS, and Framer Motion.
+A production-grade frontend portfolio showcasing scalable UI systems, interaction design, and real-world application architecture.
 
-## Features
+This repository contains the source code for my personal portfolio — designed to reflect how I think, design, and build frontend systems in professional environments.
 
-- 🎨 Modern and beautiful UI design
-- 📱 Fully responsive layout
-- ✨ Smooth animations with Framer Motion
-- 🚀 Fast and optimized with Next.js
-- 🎯 Smooth scrolling navigation
-- 💫 Interactive hover effects
-- 🌈 Gradient text effects
+---
+
+## Why This Portfolio Exists
+
+This is not a visual gallery.
+
+It is a **systems-first frontend portfolio** built to demonstrate:
+
+- How I structure UI at scale
+- How I think about interaction, state, and performance
+- How design and engineering decisions translate into real products
+- How I communicate intent through code, motion, and hierarchy
+
+---
+
+## What You’ll Find Here
+
+- 🧩 **System-driven UI architecture** (not page-by-page hacks)
+- ⚡ **Performance-aware rendering & motion**
+- 🎯 **Scroll-aware navigation & interaction states**
+- 🎨 **Design-engineering balance** (clarity > decoration)
+- 📱 **Fully responsive layouts** across devices
+- ♿ **Accessibility-conscious interactions**
+
+---
 
 ## Tech Stack
 
-- **Next.js 14** - React framework
-- **TypeScript** - Type safety
-- **Tailwind CSS** - Styling
-- **Framer Motion** - Animations
+- **Next.js 14 (App Router)** — Application framework
+- **React** — Component architecture
+- **Tailwind CSS** — Utility-first styling with design consistency
+- **Framer Motion** — Purposeful motion & micro-interactions
+- **Lucide Icons** — Lightweight iconography
+- **Vercel-ready** — Optimized for modern deployment
 
-## Getting Started
+---
 
-### Prerequisites
+## Project Structure
 
-- Node.js 18+ installed
-- npm or yarn package manager
-
-### Installation
-
-1. Install dependencies:
-```bash
-npm install
-# or
-yarn install
-```
-
-2. Run the development server:
-```bash
-npm run dev
-# or
-yarn dev
-```
-
-3. Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-## Customization
-
-### Update Personal Information
-
-1. **Hero Section** (`components/Hero.tsx`):
-   - Change "Your Name" to your actual name
-   - Update the tagline
-
-2. **About Section** (`components/About.tsx`):
-   - Update the about text
-   - Modify the statistics
-
-3. **Skills Section** (`components/Skills.tsx`):
-   - Update the skills array with your skills and proficiency levels
-
-4. **Projects Section** (`components/Projects.tsx`):
-   - Replace the example projects with your actual projects
-   - Update links and descriptions
-
-5. **Contact Section** (`components/Contact.tsx`):
-   - Update email, phone, and location
-   - Update social media links
-
-6. **Metadata** (`app/layout.tsx`):
-   - Update the title and description in the metadata
-
-## Build for Production
-
-```bash
-npm run build
-npm start
-```
-
-## License
-
-This project is open source and available under the MIT License.
-
-
-
+```txt
+app/                → App router pages & layouts
+components/         → Reusable UI & system components
+lib/                → Case study data & utilities
+public/             → Static assets
+styles/             → Global styles
