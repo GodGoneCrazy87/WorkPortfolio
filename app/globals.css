@@ -93,10 +93,6 @@
   scrollbar-color: #5a86ff #0b0f13;
 }
 
-
-.page-exit {
-  animation: pageExit 0.22s ease-out forwards;
-}
 #__next,
 main {
   min-height: 100vh;

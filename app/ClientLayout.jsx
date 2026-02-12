@@ -7,22 +7,18 @@ import { useEffect } from 'react'
 export default function ClientLayout({ children }) {
   const pathname = usePathname()
 
-  useEffect(() => {
-    document.body.classList.remove('page-exit')
-  }, [pathname])
-
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="sync" initial={false}>
       <motion.div
         key={pathname}
-        initial={{ opacity: 0, y: 6 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -6 }}
-        transition={{ duration: 0.22, ease: 'easeOut' }}
 
-        /* IMPORTANT */
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+
+        transition={{ duration: 0.2, ease: 'easeOut' }}
+
         className="min-h-screen w-full"
-        style={{ willChange: 'transform, opacity' }}
       >
         {children}
       </motion.div>

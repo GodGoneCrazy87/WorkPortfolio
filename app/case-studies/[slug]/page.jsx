@@ -107,11 +107,9 @@ useEffect(() => {
 }, [prev.slug, next.slug, router])
 
 const handleClose = () => {
-  document.body.classList.add('page-exit')
-  setTimeout(() => {
-    router.push('/#work')
-  }, 220)
+  router.push('/#work')
 }
+
 
 const stagger = {
   hidden: {},
@@ -449,13 +447,10 @@ image={study.slug === 'web3onwards' ? null : overviewImg}
   <Link
     href={`/case-studies/${next.slug}`}
     onClick={(e) => {
-      e.preventDefault()
-      document.body.classList.add('page-exit')
+  e.preventDefault()
+  router.push(`/case-studies/${next.slug}`)
+}}
 
-      setTimeout(() => {
-        router.push(`/case-studies/${next.slug}`)
-      }, 220)
-    }}
     className={`
       group relative block
       rounded-2xl
