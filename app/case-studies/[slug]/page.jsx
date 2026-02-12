@@ -1,4 +1,8 @@
 'use client'
+import { useEffect } from 'react'
+import Link from 'next/link'
+import { useScroll, useTransform } from 'framer-motion'
+import { useReducedMotion } from 'framer-motion'
 
 import { notFound, useRouter } from 'next/navigation'
 import Image from 'next/image'
@@ -6,8 +10,58 @@ import { motion } from 'framer-motion'
 import { caseStudies } from '@/lib/caseStudies'
 import { X } from 'lucide-react'
 
+export const dynamic = 'force-static'
+
+const PROJECT_THEMES = {
+  web3onwards: {
+    glow: 'from-orange-500/20 via-gray-500/10 to-transparent',
+    border: 'border-orange-400/30',
+    arrow: 'text-orange-400',
+  },
+  'solo-leveling-journal': {
+    glow: 'from-purple-500/25 via-purple-500/10 to-transparent',
+    border: 'border-purple-400/30',
+    arrow: 'text-purple-400',
+  },
+  'mudra-analytics': {
+    glow: 'from-yellow-400/25 via-yellow-300/10 to-transparent',
+    border: 'border-yellow-400/30',
+    arrow: 'text-yellow-400',
+  },
+}
+
+const PAGE_THEMES = {
+  web3onwards: {
+    bg: 'from-orange-500/20 via-zinc-900/40 to-black',
+    glow: 'bg-orange-400/20',
+  },
+
+  'solo-leveling-journal': {
+    bg: 'from-purple-900/50 via-zinc-900/40 to-black',
+    glow: 'bg-purple-500/25',
+  },
+
+  'mudra-analytics': {
+    bg: 'from-amber-400/20 via-zinc-900/40 to-black',
+    glow: 'bg-amber-300/20',
+  },
+}
+
+
 export default function CaseStudyPage({ params }) {
   const router = useRouter()
+
+  const TRANSITION = {
+  in: 0.28,
+  out: 0.22,
+  ease: 'easeOut',
+}
+
+useEffect(() => {
+  requestAnimationFrame(() => {
+    window.scrollTo({ top: 0, behavior: 'auto' })
+  })
+}, [params.slug])
 
   const index = caseStudies.findIndex(
     c => c.slug === params.slug
@@ -15,50 +69,169 @@ export default function CaseStudyPage({ params }) {
 
   const study = caseStudies[index]
 
-  if (!study) notFound()
+if (!study) {
+  router.replace('/404')
+  return null
+}
 
-  /* Prev / Next */
-  const prev =
-    caseStudies[(index - 1 + caseStudies.length) % caseStudies.length]
 
-  const next =
-    caseStudies[(index + 1) % caseStudies.length]
+/* Prev / Next */
+const prev =
+  caseStudies[(index - 1 + caseStudies.length) % caseStudies.length]
 
-  const [hero, overviewImg, scopeImg, goalsImg] = study.images
+const next =
+  caseStudies[(index + 1) % caseStudies.length]
+  
+const [hero, overviewImg, scopeImg, goalsImg] = study.images
+
+const prevImg = prev?.images?.[0] ?? hero
+const nextImg = next?.images?.[0] ?? hero
+const prevTheme = PROJECT_THEMES[prev.slug] ?? PROJECT_THEMES.web3onwards
+const nextTheme = PROJECT_THEMES[next.slug] ?? PROJECT_THEMES.web3onwards
+
+const pageTheme =
+  PAGE_THEMES[study.slug] ?? PAGE_THEMES.web3onwards
+
+const themeGlow = pageTheme.glow
+const { scrollY } = useScroll()
+
+const heroY = useTransform(scrollY, [0, 600], [0, -120])
+const heroScale = useTransform(scrollY, [0, 600], [1, 1.05])
+
+const bgY = useTransform(scrollY, [0, 1000], [0, 150])
+const prefersReduced = useReducedMotion()
+
+useEffect(() => {
+  router.prefetch(`/case-studies/${prev.slug}`)
+  router.prefetch(`/case-studies/${next.slug}`)
+}, [prev.slug, next.slug, router])
+
+const handleClose = () => {
+  document.body.classList.add('page-exit')
+  setTimeout(() => {
+    router.push('/#work')
+  }, 220)
+}
+
+const stagger = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.15,
+    },
+  },
+}
+const reveal = prefersReduced
+  ? {
+      hidden: { opacity: 0 },
+      visible: { opacity: 1 },
+    }
+  : {
+      hidden: { opacity: 0, y: 40 },
+      visible: {
+        opacity: 1,
+        y: 0,
+        transition: {
+          duration: 0.6,
+          ease: 'easeOut',
+        },
+      },
+    }
 
   return (
 <section
   className="relative bg-[#0b0f13] text-gray-200 overflow-x-hidden"
 >
 
-      {/* Background Glow (Clipped) */}
+
+{/* Background Theme */}
 <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-  <div className="absolute inset-0 flex justify-center items-start">
-    <div className="w-[900px] h-[900px] mt-[-15%] bg-[#e6d3a3]/10 blur-[180px] rounded-full" />
-  </div>
+{/* Cinematic ambient glow */}
+<div className="pointer-events-none fixed inset-0 -z-10">
+  <motion.div
+  style={{ y: bgY }}
+  className={`
+    absolute top-[-25%] right-[-15%]
+      w-[700px] h-[700px]
+      rounded-full
+      blur-[180px]
+      opacity-70
+      ${themeGlow}
+    `}
+  />
+</div>
+
+  {/* Base gradient */}
+<motion.div
+  className={`
+    absolute inset-0
+    bg-gradient-to-br ${pageTheme.bg}
+  `}
+  animate={{
+    backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
+  }}
+  transition={{
+    duration: 30,
+    repeat: Infinity,
+    ease: 'linear',
+  }}
+  style={{
+    backgroundSize: '200% 200%',
+  }}
+/>
+
+
+  {/* Floating glow */}
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 1 }}
+    className="
+      absolute top-[-20%] left-1/2 -translate-x-1/2
+      w-[900px] h-[900px]
+      rounded-full
+      blur-[180px]
+      bg-white/5
+    "
+  />
 </div>
 
 
+
       {/* Close */}
-      <button
-        onClick={() => router.push('/#work')}
-        className="
-          fixed bottom-10 left-1/2 -translate-x-1/2 z-40
-          w-14 h-14 rounded-full
-          bg-black border border-gray-700
-          flex items-center justify-center
-          text-white
-          hover:scale-110 transition
-        "
-      >
-        <X />
-      </button>
+<button
+  onClick={handleClose}
+  className="
+    fixed bottom-10 left-1/2 -translate-x-1/2 z-40
+    w-14 h-14 rounded-full
+    bg-black/80 backdrop-blur
+    border border-gray-700
+    flex items-center justify-center
+    text-white
+
+    transition-all duration-300
+
+    hover:border-purple-400/70
+    hover:shadow-[0_0_20px_rgba(168,85,247,0.45)]
+    hover:scale-110
+  "
+>
+  <X size={22} />
+</button>
+
 
 {/* MAIN */}
 <motion.div
-  initial={{ opacity: 0, filter: 'blur(6px)' }}
-  animate={{ opacity: 1, filter: 'blur(0px)' }}
-  transition={{ duration: 0.25, ease: 'easeOut' }}
+ style={{ willChange: 'transform, opacity' }}
+  initial={{ opacity: 0, scale: 0.96, y: 12 }}
+  animate={{ opacity: 1, scale: 1, y: 0 }}
+  exit={{ opacity: 0, scale: 0.98, y: -12 }}
+  transition={{
+    duration: TRANSITION.in,
+    ease: TRANSITION.ease,
+  }}
+
   className="relative z-10 w-full overflow-x-hidden"
 >
 
@@ -66,38 +239,47 @@ export default function CaseStudyPage({ params }) {
   className="
     max-w-[1300px] mx-auto px-6 pt-28 pb-40
     space-y-36
-    snap-y snap-mandatory
+    snap-y  snap-mandatory
     scroll-smooth
   "
 >
 
         {/* HEADER */}
-<header className="space-y-14 snap-start">
+<motion.header
+  variants={stagger}
+  initial="hidden"
+  whileInView="visible"
+  viewport={{ once: true, margin: '-80px' }}
+  className="space-y-14 snap-start"
+>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif text-[#e6d3a3]">
+          <motion.h1 variants={reveal} className="text-4xl sm:text-5xl md:text-6xl font-serif text-[#e6d3a3]">
             {study.title}
-          </h1>
+          </motion.h1>
 
-<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+<motion.div variants={reveal} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
 
             <MetaBig label="Project Niche" value={study.niche} />
             <MetaBig label="Client" value={study.client} />
             <MetaBig label="Date" value={study.date} />
             <MetaBig label="Project Type" value={study.type} />
 
-          </div>
+          </motion.div>
 
-        </header>
+        </motion.header>
 
         {/* HERO */}
 <HeroImage
   src={hero}
   alt={study.title}
-  slug={params.slug}
+  reveal={reveal}
+  y={heroY}
+  scale={heroScale}
 />
 
+
         {/* OVERVIEW */}
-        <EditorialSection
+        <EditorialSection reveal={reveal}
           label="Project Overview"
           title={`${study.title.toUpperCase()} IS LEADING IN ITS DOMAIN.`}
 image={study.slug === 'web3onwards' ? null : overviewImg}
@@ -106,7 +288,12 @@ image={study.slug === 'web3onwards' ? null : overviewImg}
         </EditorialSection>
 
         {/* FEATURES */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 snap-start">
+        <motion.div
+  variants={reveal}
+  initial="hidden"
+  whileInView="visible"
+  viewport={{ once: true }}
+  className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 snap-start">
 
           <Feature
             title="Effortless Integration"
@@ -123,7 +310,7 @@ image={study.slug === 'web3onwards' ? null : overviewImg}
             text="Built for growth and high-volume workloads."
           />
 
-        </div>
+        </motion.div>
 
         {/* DEFLIX CUSTOM LAYOUT */}
 {study.slug === 'web3onwards' && (
@@ -189,68 +376,132 @@ image={study.slug === 'web3onwards' ? null : overviewImg}
 
   <div className="grid md:grid-cols-2 gap-10 pl-10">
 
-    {/* PREVIOUS */}
-    <a
-      href={`/case-studies/${prev.slug}`}
-      className="
-        group relative
-        rounded-2xl
-        border border-gray-800
-        bg-[#121018]
-        p-8
-        overflow-hidden
-        transition-all duration-200
-        hover:border-purple-500/50
-        hover:shadow-[0_0_28px_rgba(168,85,247,0.12)]
-      "
+{/* PREVIOUS */}
+<motion.div
+  initial={{ x: 0 }}
+  whileHover={{ x: -12 }}
+  transition={{ type: 'spring', stiffness: 220 }}
+>
+  <Link
+    href={`/case-studies/${prev.slug}`}
+    onClick={(e) => {
+      e.preventDefault()
+      document.body.classList.add('page-exit')
+      setTimeout(() => {
+        router.push(`/case-studies/${prev.slug}`)
+      }, 220)
+    }}
+    className={`
+      group relative block
+      rounded-2xl
+      ${prevTheme.border}
+      bg-gradient-to-br ${prevTheme.glow}
+      p-8
+      overflow-hidden
+      transition-all
+    `}
+  >
+    {/* Arrow */}
+    <motion.span
+      className={`absolute left-5 top-1/2 -translate-y-1/2 text-2xl ${prevTheme.arrow}`}
+      initial={{ x: 0, opacity: 0.6 }}
+      whileHover={{ x: -6, opacity: 1 }}
     >
-      {/* Soft glow */}
-      <div className="absolute inset-0 bg-purple-500/5 opacity-0 group-hover:opacity-100 transition" />
+      ←
+    </motion.span>
 
-      <p className="text-xs uppercase tracking-wider text-gray-500 mb-2">
-        Previous project
-      </p>
+    <div className="flex items-center gap-5 pl-6">
 
-      <div className="flex items-center gap-3">
-        <span className="text-purple-400 text-lg">←</span>
+      {/* Thumbnail */}
+      <div className="w-20 h-16 rounded-lg overflow-hidden shrink-0">
+        <Image
+          src={prevImg}
+          alt={prev.title}
+          width={160}
+          height={120}
+          className="object-cover"
+        />
+      </div>
 
-        <p className="text-xl text-white font-medium leading-snug">
+      {/* Text */}
+      <div>
+        <p className="text-xs uppercase tracking-wider text-gray-400 mb-1">
+          Previous Project
+        </p>
+
+        <p className="text-lg text-white font-medium">
           {prev.title}
         </p>
       </div>
-    </a>
 
-    {/* NEXT */}
-    <a
-      href={`/case-studies/${next.slug}`}
-      className="
-        group relative
-        rounded-2xl
-        border border-gray-800
-        bg-[#121018]
-        p-8
-        overflow-hidden
-        text-right
-        transition-all duration-200
-        hover:border-blue-500/50
-        hover:shadow-[0_0_28px_rgba(59,130,246,0.12)]
-      "
+    </div>
+  </Link>
+</motion.div>
+
+
+{/* NEXT */}
+{/* NEXT */}
+<motion.div
+  initial={{ x: 0 }}
+  whileHover={{ x: 12 }}
+  transition={{ type: 'spring', stiffness: 220 }}
+>
+  <Link
+    href={`/case-studies/${next.slug}`}
+    onClick={(e) => {
+      e.preventDefault()
+      document.body.classList.add('page-exit')
+
+      setTimeout(() => {
+        router.push(`/case-studies/${next.slug}`)
+      }, 220)
+    }}
+    className={`
+      group relative block
+      rounded-2xl
+      ${nextTheme.border}
+      bg-gradient-to-br ${nextTheme.glow}
+      p-8
+      overflow-hidden
+      transition-all
+    `}
+  >
+    {/* Arrow */}
+    <motion.span
+      className={`absolute right-5 top-1/2 -translate-y-1/2 text-2xl ${nextTheme.arrow}`}
+      initial={{ x: 0, opacity: 0.6 }}
+      whileHover={{ x: 6, opacity: 1 }}
     >
-      {/* Soft glow */}
-      <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition" />
+      →
+    </motion.span>
 
-      <p className="text-xs uppercase tracking-wider text-gray-500 mb-2">
-        Next project
-      </p>
+    <div className="flex items-center justify-between gap-5 pr-6">
 
-      <div className="flex items-center justify-end gap-3">
-        <p className="text-xl text-white font-medium leading-snug">
-          {next.title}
+      {/* Text */}
+      <div className="text-right">
+        <p className="text-xs uppercase tracking-wider text-gray-400 mb-1">
+          Next Project
         </p>
 
-        <span className="text-blue-400 text-lg">→</span>
+        <p className="text-lg text-white font-medium">
+          {next.title}
+        </p>
       </div>
-    </a>
+
+      {/* Thumbnail */}
+      <div className="w-20 h-16 rounded-lg overflow-hidden shrink-0">
+        <Image
+          src={nextImg}
+          alt={next.title}
+          width={160}
+          height={120}
+          className="object-cover"
+        />
+      </div>
+
+    </div>
+  </Link>
+</motion.div>
 
   </div>
 </div>
@@ -264,11 +515,15 @@ image={study.slug === 'web3onwards' ? null : overviewImg}
 
 /* ───────────────── COMPONENTS ───────────────── */
 
-function HeroImage({ src, alt, slug }) {
+function HeroImage({ src, alt, reveal, y, scale }) {
   return (
     <motion.div
-      layoutId={`case-image-${slug}`}
-className="max-w-[1100px] mx-auto rounded-3xl overflow-hidden border border-gray-800 bg-black snap-start will-change-transform"
+     style={{ y, scale }}
+  variants={reveal}
+  initial="hidden"
+  whileInView="visible"
+  viewport={{ once: true }}
+ className="max-w-[1100px] mx-auto rounded-3xl overflow-hidden border border-gray-800 bg-black snap-start will-change-transform"
     >
       <Image
         src={src}
@@ -298,9 +553,15 @@ function MetaBig({ label, value }) {
   )
 }
 
-function EditorialSection({ label, title, image, children }) {
+function EditorialSection({ label, title, image, children, reveal }) {
   return (
-    <section className="space-y-20 snap-start">
+<motion.section
+  variants={reveal}
+  initial="hidden"
+  whileInView="visible"
+  viewport={{ once: true, margin: '-80px' }}
+  className="space-y-20 snap-start"
+>
 
       <div className="grid grid-cols-1 md:grid-cols-[320px_1fr] gap-20">
 
@@ -336,7 +597,7 @@ function EditorialSection({ label, title, image, children }) {
         </div>
       )}
 
-    </section>
+    </motion.section>
   )
 }
 
@@ -418,6 +679,29 @@ function DeflixPairCapped({ left, right }) {
   )
 }
 
+function CaseStudySkeleton() {
+  return (
+    <div className="max-w-[1300px] mx-auto px-6 pt-28 space-y-16 animate-pulse">
+
+      <div className="h-14 w-2/3 bg-gray-800 rounded" />
+
+      <div className="grid grid-cols-4 gap-6">
+        {[...Array(4)].map((_, i) => (
+          <div key={i} className="h-16 bg-gray-800 rounded" />
+        ))}
+      </div>
+
+      <div className="h-[400px] bg-gray-800 rounded-3xl" />
+
+      <div className="space-y-4">
+        <div className="h-6 bg-gray-800 w-1/3 rounded" />
+        <div className="h-4 bg-gray-800 w-full rounded" />
+        <div className="h-4 bg-gray-800 w-5/6 rounded" />
+      </div>
+
+    </div>
+  )
+}
 
 function MarketFocus({ market }) {
   return (

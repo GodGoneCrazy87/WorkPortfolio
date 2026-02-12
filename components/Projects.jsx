@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useState,useEffect } from 'react'
 import Image from 'next/image'
 import { Github, Figma, ExternalLink } from 'lucide-react'
 import { useRouter } from 'next/navigation'
@@ -89,17 +90,47 @@ const tagColors = {
   Web3: 'bg-indigo-500/10 text-indigo-400',
   Figma: 'bg-pink-500/10 text-pink-400',
 }
-
+const TRANSITION = {
+  in: 0.28,
+  out: 0.22,
+  ease: 'easeOut',
+}
 /* ----------------------------- COMPONENT ----------------------------- */
 
 export default function Projects() {
   const router = useRouter()
+  const [activeSlug, setActiveSlug] = useState(null)
+  useEffect(() => {
+  projects.forEach((p) => {
+    router.prefetch(`/case-studies/${p.slug}`)
+  })
+}, [router])
+
+useEffect(() => {
+  if (typeof window === 'undefined') return
+
+  projects.forEach((p) => {
+    const img = new window.Image()
+    img.src = p.image
+  })
+}, [])
+
+
 
   return (
-    <section 
-      id='work'
-        className="bg-[#0F1115] border-b border-gray-800">
-      <div className="max-w-[1400px] mx-auto px-6 sm:px-10 py-24 sm:py-28">
+    <section id="work" className="relative bg-[#0F1115] border-b border-gray-800">
+
+      {/* Overlay (outside map) */}
+      {activeSlug && (
+        <motion.div
+          className="fixed inset-0 bg-black/40 z-10"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.18 }}
+        />
+      )}
+
+      <div className="relative max-w-[1400px] mx-auto px-6 sm:px-10 py-24 sm:py-28">
 
         {/* HEADER */}
         <div className="max-w-2xl mb-16 sm:mb-20">
@@ -115,27 +146,52 @@ export default function Projects() {
         </div>
 
         {/* GRID */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-          {projects.map((project) => (
-<motion.article
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.25, ease: 'easeOut' }}
-              onClick={() => router.push(`/case-studies/${project.slug}`)}
-              className="
-                group cursor-pointer
-                rounded-2xl
-                border border-gray-800
-                bg-[#121018]
-                overflow-hidden
-                hover:border-purple-500/40
-                hover:shadow-lg hover:shadow-purple-500/10
-                transition-all
-              "
-            >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 relative z-20">
+
+          {projects.map((project) => {
+            const isActive = activeSlug === project.slug
+            const isHidden = activeSlug && !isActive
+
+            return (
+              <motion.article
+  key={project.slug}
+  onClick={() => {
+    if (activeSlug) return
+
+    setActiveSlug(project.slug)
+
+    setTimeout(() => {
+      router.push(`/case-studies/${project.slug}`)
+    }, 380)
+  }}
+
+  animate={{
+    opacity: isHidden ? 0 : 1,
+    scale: isActive ? 1.12 : 1,
+    y: isActive ? -8 : 0,
+  }}
+
+  transition={{
+    duration: TRANSITION.in,
+    ease: TRANSITION.ease,
+  }}
+
+                className="
+                  group cursor-pointer
+                  relative
+                  rounded-2xl
+                  border border-gray-800
+                  bg-[#121018]
+                  overflow-hidden
+                  hover:border-purple-500/40
+                  hover:shadow-lg hover:shadow-purple-500/10
+                  transition-all
+                "
+              >
+
               {/* IMAGE */}
               <div className="relative h-[240px] w-full overflow-hidden">
                 <motion.div
-                  layoutId={`case-image-${project.slug}`}
                   whileHover={{ scale: 0.9 }}
                   transition={{ duration: 0.35, ease: 'easeOut' }}
                   className="h-full w-full"
@@ -222,7 +278,8 @@ export default function Projects() {
                 </div>
               </div>
             </motion.article>
-          ))}
+            )
+})}
         </div>
       </div>
     </section>

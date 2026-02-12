@@ -74,7 +74,7 @@ export default function Hero() {
       >
         {/* ---------------- LEFT ---------------- */}
         <motion.div
-          initial={{ opacity: 0, y: 14 }}
+          initial={{ opacity: 0, transform: 'translate3d(0,14px,0)' }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
           className="flex flex-col max-w-[560px]"
@@ -149,7 +149,7 @@ performance, and long-term clarity.
 
         {/* ---------------- RIGHT ---------------- */}
         <motion.div
-          initial={{ opacity: 0, y: 14 }}
+          initial={{ opacity: 0,  transform: 'translate3d(0,14px,0)'}}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: 'easeOut', delay: 0.1 }}
           className="w-full flex justify-center lg:justify-end"
