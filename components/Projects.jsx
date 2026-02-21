@@ -70,7 +70,7 @@ const projects = [
       'Shipped production-grade Web3 features',
     ],
     stack: ['NodeJS', 'ReactJS', 'Tailwind CSS', 'Web3', 'Figma'],
-    image: '/Deflix0.png',
+    image: '/deflix0.png',
     github: null,
     figma: 'https://www.figma.com/design/J6gz8Y8xIaYhdusjDG03qS',
     live: 'https://nfthing.com/',
