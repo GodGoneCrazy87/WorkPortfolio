@@ -30,19 +30,19 @@ const rowVariants = {
 }
 
 const slideVariants = {
-  initial: { opacity: 0, x: 24 },
-  animate: { opacity: 1, x: 0 },
-  exit: { opacity: 0, x: -24 },
+  initial: { opacity: 0, y: 12 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -12 },
 }
 
 /* -------------------------------- HERO -------------------------------- */
 
 export default function Hero() {
-  const taglines = [
-    'Built production interfaces used by 5000+ real users at NFThing (DW3LL)',
-    'Shipped responsive dashboards and design systems in production',
-    'Built a gamified life dashboard for real-world habit systems',
-  ]
+const taglines = [
+'Built production systems used by 5000+ users at NFThing (DW3LL)',
+'Improved API efficiency and rendering performance by up to 40%',
+'Designed scalable UI systems and dashboards used in production',
+]
 
   const [index, setIndex] = useState(0)
 
@@ -74,34 +74,36 @@ export default function Hero() {
       >
         {/* ---------------- LEFT ---------------- */}
         <motion.div
-          initial={{ opacity: 0, transform: 'translate3d(0,14px,0)' }}
+          initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="flex flex-col max-w-[560px]"
+          className="flex flex-col max-w-[600px]"
         >
           {/* ROLE */}
-          <p className="text-base sm:text-lg font-medium text-purple-400 mb-3">
-            Front-End Engineer • UI Systems & UX
+          <p className="text-base sm:text-lg font-medium text-purple-400 mb-4">
+            Full-Stack Product Engineer • React / Next.js
           </p>
 
           {/* NAME */}
           <h1 className="text-3xl sm:text-5xl font-semibold text-white leading-tight mb-5">
             Vishnurat Kadagadakai
           </h1>
-
+          <p className="text-sm text-purple-300 mb-4 font-medium">
+  Currently building <span className="text-purple-400 font-semibold">VAYU</span> — a gamified identity system
+</p>
           {/* DESCRIPTION */}
-          <p className="text-base sm:text-lg text-gray-400 leading-relaxed mb-6 max-w-[520px]">
-I design and build front-end systems that stay maintainable under real
-product pressure — using React and Next.js to balance usability,
-performance, and long-term clarity.
+          <p className="text-base sm:text-lg text-gray-400 leading-relaxed mb-6 max-w-[520px] ">
+I build product systems end-to-end — from backend APIs and data models
+to scalable frontend architecture using React and Next.js. My focus is
+shipping maintainable systems that perform reliably under real product usage.
           </p>
 
           {/* SLIDING PROOF */}
-          <div className="min-h-[44px] mb-8 overflow-hidden flex items-start gap-3">
+          <div className="h-[52px] mb-8 overflow-hidden flex items-start gap-3">
             <span className="mt-1 h-4 w-[2px]  bg-gradient-to-b from-purple-500/70 via-purple-500/30 to-transparent rounded-full shrink-0" />
 
-            <AnimatePresence mode="wait">
-              <motion.p
+            <AnimatePresence mode="wait" initial={false}>
+                <motion.p
                 key={index}
                 variants={slideVariants}
                 initial="initial"
@@ -116,40 +118,68 @@ performance, and long-term clarity.
           </div>
 
           {/* CTA */}
-          <motion.a
-            href="#work"
-            whileHover="hover"
-            whileTap={{ scale: 0.97 }}
-            initial="rest"
-            animate="rest"
-            className="
-              relative mr-auto inline-flex items-center gap-2
-              px-6 py-2.5
-              text-sm font-semibold text-white
-              rounded-full
-              bg-gradient-to-r from-[#4F7DFF] to-[#7C5CFF]
-              hover:from-[#5A86FF] hover:to-[#8A6BFF]
-              shadow-md shadow-[#4F7DFF]/30
-              transition-all
-            "
-          >
-            <span>Explore My Work</span>
+          <div className="flex items-center gap-4 mt-2">
 
-            <motion.span
-              variants={{
-                rest: { x: 0 },
-                hover: { x: 8 },
-              }}
-              transition={{ duration: 0.25, ease: 'easeOut' }}
-            >
-              →
-            </motion.span>
-          </motion.a>
+<motion.a
+  href="#work"
+  whileHover="hover"
+  whileTap={{ scale: 0.97 }}
+  initial="rest"
+  animate="rest"
+  className="
+    relative inline-flex items-center gap-2
+    px-6 py-2.5
+    text-sm font-semibold text-white
+    rounded-full
+    bg-gradient-to-r from-[#4F7DFF] to-[#7C5CFF]
+    hover:from-[#5A86FF] hover:to-[#8A6BFF]
+    shadow-md shadow-[#4F7DFF]/30
+  "
+>
+  Explore My Work
+  <motion.span variants={{ rest:{x:0}, hover:{x:8} }}>
+    →
+  </motion.span>
+</motion.a>
+
+<motion.a
+  href="https://github.com/Godgonecrazy87"
+  target="_blank"
+  rel="noopener noreferrer"
+  whileHover="hover"
+  whileTap={{ scale: 0.97 }}
+  initial="rest"
+  animate="rest"
+  className="
+    relative inline-flex items-center gap-2
+    px-6 py-2.5
+    text-sm font-semibold text-gray-200
+    rounded-full
+    border border-gray-700
+    hover:text-white
+    hover:border-purple-500/50
+    transition-colors
+  "
+>
+  View GitHub
+
+  <motion.span
+    variants={{
+      rest: { x: 0 },
+      hover: { x: 8 },
+    }}
+    transition={{ duration: 0.25, ease: 'easeOut' }}
+  >
+    →
+  </motion.span>
+</motion.a>
+
+</div>
         </motion.div>
 
         {/* ---------------- RIGHT ---------------- */}
         <motion.div
-          initial={{ opacity: 0,  transform: 'translate3d(0,14px,0)'}}
+          initial={{ opacity: 0,  y: 14}}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: 'easeOut', delay: 0.1 }}
           className="w-full flex justify-center lg:justify-end"
@@ -170,7 +200,7 @@ function ProductPreview() {
     <motion.div
       variants={glowVariants}
       initial="rest"
-      whileHover="hover"
+      whileHover={{ scale: 1.01 }}
       animate="rest"
       className="
         relative rounded-xl
@@ -186,25 +216,25 @@ function ProductPreview() {
       {/* HEADER */}
       <div className="pb-5 border-b border-gray-800">
         <p className="text-xs uppercase tracking-[0.3em] text-purple-400">
-          Concept Dashboard
+           VAYU Product Preview
         </p>
         <h3 className="text-lg font-semibold text-white mt-1">
-          Gamified productivity overview
+          Gamified identity & productivity system
         </h3>
         <p className="text-xs text-gray-500 mt-1">
           System concept • Based on real-world usage patterns
         </p>
         <p className="text-sm text-gray-400 mt-2 max-w-md">
-          Habit tracking and progression metrics presented through a structured,
-          gamified interface.
+          Habit tracking, identity progression, and analytics dashboards built
+for long-term behavioral systems.
         </p>
       </div>
 
       {/* KPIs */}
       <div className="grid grid-cols-3 gap-3 sm:gap-4 mt-6">
-        <Kpi label="Level" value="15" meta="User progression" />
-        <Kpi label="Active Streak" value="100 days" meta="Consistency metric" />
-        <Kpi label="Coins" value="320" meta="Earned rewards" />
+        <Kpi label="Player Level" value="15" meta="User progression" />
+        <Kpi label="Consistency Streak" value="100 days" meta="Consistency metric" />
+        <Kpi label="XP Balance" value="320" meta="Earned rewards" />
       </div>
 
       {/* XP */}
@@ -233,8 +263,8 @@ function ProductPreview() {
 
       {/* FOOTER */}
       <div className="grid grid-cols-2 gap-6 mt-8 pt-6 border-t border-gray-800">
-        <Meta label="Interaction model" value="Habit-driven progression" />
-        <Meta label="Update cadence" value="Daily user actions" />
+        <Meta label="Core System" value="Habit-driven identity progression" />
+        <Meta label="Behavior Loop" value="Daily user actions" />
       </div>
     </motion.div>
   )

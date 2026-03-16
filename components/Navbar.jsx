@@ -1,12 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import {
-  motion,
-  AnimatePresence,
-  useReducedMotion,
-  useScroll,
-} from 'framer-motion'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 
 const navItems = [
   { name: 'Work', href: '#work' },
@@ -15,83 +10,57 @@ const navItems = [
   { name: 'Contact', href: '#contact' },
 ]
 
-/* ---------------- SMOOTH SCROLL (CONTROLLED) ---------------- */
-
-const smoothScrollToTop = (reduced) => {
-  if (reduced) {
-    window.scrollTo(0, 0)
-    return
-  }
-
-  const start = window.scrollY
-  const duration = 700
-  const startTime = performance.now()
-
-  const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3)
-
-  const tick = (now) => {
-    const elapsed = now - startTime
-    const progress = Math.min(elapsed / duration, 1)
-    const eased = easeOutCubic(progress)
-
-    window.scrollTo(0, start * (1 - eased))
-
-    if (progress < 1) requestAnimationFrame(tick)
-  }
-
-  requestAnimationFrame(tick)
-}
-
 export default function Navbar() {
   const [active, setActive] = useState('')
   const [expanded, setExpanded] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
 
   const prefersReducedMotion = useReducedMotion()
-  const { scrollY } = useScroll()
-  const lastActive = useRef('')
 
-  /* ---------------- EXPAND NAME ---------------- */
+  const observerRef = useRef(null)
+
+  /* ---------- EXPAND NAME (cheap passive scroll) ---------- */
+
   useEffect(() => {
-    return scrollY.on('change', (y) => {
-      setExpanded(y > 420)
-    })
-  }, [scrollY])
+    const handleScroll = () => {
+      setExpanded(window.scrollY > 420)
+    }
 
-  /* ---------------- SCROLL SPY + HASH SYNC ---------------- */
+    window.addEventListener('scroll', handleScroll, { passive: true })
+
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  /* ---------- INTERSECTION OBSERVER SCROLL SPY ---------- */
+
   useEffect(() => {
     const sections = navItems
-      .map(({ href }) => document.querySelector(href))
+      .map(i => document.querySelector(i.href))
       .filter(Boolean)
 
-    return scrollY.on('change', () => {
-      const midpoint = window.innerHeight * 0.45
-
-      if (window.scrollY < 120) {
-        if (lastActive.current !== '') {
-          lastActive.current = ''
-          setActive('')
-          history.replaceState(null, '', '/')
-        }
-        return
-      }
-
-      for (const section of sections) {
-        const rect = section.getBoundingClientRect()
-        if (rect.top <= midpoint && rect.bottom >= midpoint) {
-          const hash = `#${section.id}`
-          if (lastActive.current !== hash) {
-            lastActive.current = hash
-            setActive(hash)
-            history.replaceState(null, '', hash)
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const id = `#${entry.target.id}`
+            setActive(id)
+            history.replaceState(null, '', id)
           }
-          break
-        }
+        })
+      },
+      {
+        rootMargin: '-40% 0px -55% 0px',
+        threshold: 0,
       }
-    })
-  }, [scrollY])
+    )
 
-  /* ---------------- NAV SCROLL ---------------- */
+    sections.forEach(section => observerRef.current.observe(section))
+
+    return () => observerRef.current?.disconnect()
+  }, [])
+
+  /* ---------- NAV SCROLL ---------- */
+
   const scrollTo = (hash) => {
     const el = document.querySelector(hash)
     if (!el) return
@@ -106,120 +75,118 @@ export default function Navbar() {
   }
 
   const scrollHome = () => {
-    const topEl = document.getElementById('top')
-    if (!topEl) return
-  
-    topEl.scrollIntoView({
+    window.scrollTo({
+      top: 0,
       behavior: prefersReducedMotion ? 'auto' : 'smooth',
-      block: 'start',
     })
-  
+
     history.replaceState(null, '', '/')
     setActive('')
-    setMobileOpen(false)
   }
-  
-  /* ================= RENDER ================= */
+
+  const resumeVariants = {
+    rest: { scale: 1 },
+    hover: { scale: 1.03 },
+  }
+
+  const arrowVariants = {
+    rest: { x: 0 },
+    hover: { x: 8 },
+  }
 
   return (
     <>
-      {/* ================= DESKTOP ================= */}
+      {/* DESKTOP NAVBAR */}
+
       <header className="fixed top-5 left-0 right-0 z-50 hidden md:block">
         <div className="max-w-[1400px] mx-auto px-6">
+
           <div className="flex items-center h-14 px-6 rounded-full border border-gray-700 bg-[#0F1115]/90 backdrop-blur-sm">
 
             {/* NAME */}
+
             <button
               onClick={scrollHome}
-              className="
-                w-[260px] text-sm font-semibold text-white text-left
-                hover:text-purple-400 transition-colors
-                focus-visible:outline-none
-                focus-visible:ring-2 focus-visible:ring-purple-500/60
-                rounded-md
-              "
+              className="w-[260px] text-sm font-semibold text-white text-left hover:text-purple-400 transition-colors"
             >
               {expanded ? 'Vishnurat Kadagadakai' : 'VK'}
             </button>
 
-            {/* CENTER NAV */}
+            {/* NAV ITEMS */}
+
             <nav className="absolute left-1/2 -translate-x-1/2 flex gap-8">
-              {navItems.map((item) => {
+
+              {navItems.map(item => {
+
                 const isActive = active === item.href
 
                 return (
                   <button
                     key={item.href}
                     onClick={() => scrollTo(item.href)}
-                    aria-current={isActive ? 'page' : undefined}
-                    className={`
-                      group relative text-sm font-medium
-                      transition-colors duration-200 ease-out
-                      focus-visible:outline-none
-                      focus-visible:ring-2 focus-visible:ring-purple-500/60
-                      rounded-md px-1
+                    className={`group relative text-sm font-medium transition-colors
                       ${isActive
                         ? 'text-[#4F7DFF]'
                         : 'text-gray-400 hover:text-white'}
                     `}
                   >
+
                     {item.name}
 
-                    {/* UNDERLINE */}
                     <span
-                      className={`
-                        absolute left-1/2 -bottom-1
-                        h-[2px] w-10
-                        -translate-x-1/2
-                        bg-purple-500 rounded-full
-                        origin-center
-                        transition-all duration-300 ease-out
-                        ${isActive
-                          ? 'scale-x-100 opacity-100'
-                          : 'scale-x-0 opacity-0'}
-                        group-hover:scale-x-100
-                        group-hover:opacity-100
+                      className={`absolute left-1/2 -bottom-1 h-[2px] w-10
+                      -translate-x-1/2 bg-purple-500 rounded-full
+                      transition-all duration-300
+                      ${isActive
+                        ? 'scale-x-100 opacity-100'
+                        : 'scale-x-0 opacity-0'}
+                      group-hover:scale-x-100 group-hover:opacity-100
                       `}
                     />
+
                   </button>
                 )
+
               })}
+
             </nav>
 
-            {/* RESUME */}
+            {/* RESUME BUTTON */}
+
             <motion.a
-              href="/Resume-Vishnurat-Kadagadakai.pdf"
+              href="/Resume_Vishnurat-Kadagadakai.pdf"
               target="_blank"
-              initial={prefersReducedMotion ? false : 'rest'}
-              whileHover={prefersReducedMotion ? false : 'hover'}
+              variants={resumeVariants}
+              initial="rest"
               animate="rest"
-              className="
-                ml-auto flex items-center gap-2 h-10 px-7
-                text-sm font-semibold text-white rounded-full
-                bg-gradient-to-r from-[#4F7DFF] to-[#7C5CFF]
-                shadow-md shadow-[#4F7DFF]/30
-                focus-visible:outline-none
-                focus-visible:ring-2 focus-visible:ring-purple-500/60
-              "
+              whileHover="hover"
+              className="ml-auto flex items-center gap-2 h-10 px-7 text-sm font-semibold text-white rounded-full
+              bg-gradient-to-r from-[#4F7DFF] to-[#7C5CFF] shadow-md shadow-[#4F7DFF]/30"
             >
+
               Resume
-              {!prefersReducedMotion && (
-                <motion.span
-                  variants={{ rest: { x: 0 }, hover: { x: 8 } }}
-                  transition={{ duration: 0.25 }}
-                >
-                  →
-                </motion.span>
-              )}
+
+              <motion.span
+                variants={arrowVariants}
+                transition={{ duration: 0.25, ease: 'easeOut' }}
+              >
+                →
+              </motion.span>
+
             </motion.a>
+
           </div>
         </div>
       </header>
 
-      {/* ================= MOBILE ================= */}
+      {/* MOBILE NAV */}
+
       <header className="fixed top-5 left-0 right-0 z-50 md:hidden">
+
         <div className="px-5">
+
           <div className="flex justify-between items-center h-12 px-4 rounded-full border border-gray-700 bg-[#0F1115]/90 backdrop-blur-sm">
+
             <button
               onClick={scrollHome}
               className="text-sm font-semibold text-white hover:text-purple-400"
@@ -227,30 +194,40 @@ export default function Navbar() {
               {expanded ? 'Vishnurat Kadagadakai' : 'VK'}
             </button>
 
-            <button
-              onClick={() => setMobileOpen(true)}
-              aria-label="Open menu"
-              className="flex flex-col gap-[3px]"
-            >
-              <span className="w-5 h-[2px] bg-white rounded" />
-              <span className="w-5 h-[2px] bg-white rounded" />
-              <span className="w-5 h-[2px] bg-white rounded" />
+            <button onClick={() => setMobileOpen(true)}>
+
+              <div className="flex flex-col gap-[3px]">
+
+                <span className="w-5 h-[2px] bg-white rounded" />
+                <span className="w-5 h-[2px] bg-white rounded" />
+                <span className="w-5 h-[2px] bg-white rounded" />
+
+              </div>
+
             </button>
+
           </div>
+
         </div>
+
       </header>
 
-      {/* ================= MOBILE MENU ================= */}
+      {/* MOBILE MENU */}
+
       <AnimatePresence>
+
         {mobileOpen && (
+
           <motion.div
-            initial={prefersReducedMotion ? false : { x: '100%' }}
+            initial={{ x: '100%' }}
             animate={{ x: 0 }}
-            exit={prefersReducedMotion ? false : { x: '100%' }}
+            exit={{ x: '100%' }}
             transition={{ duration: 0.35 }}
             className="fixed inset-0 z-50 bg-black/60 backdrop-blur"
           >
+
             <div className="relative h-full bg-[#0F1115] border-l border-gray-800 px-8 pt-8 pb-10 flex flex-col">
+
               <button
                 onClick={() => setMobileOpen(false)}
                 className="absolute top-6 left-6 text-3xl text-white"
@@ -259,7 +236,9 @@ export default function Navbar() {
               </button>
 
               <nav className="mt-24 flex flex-col gap-14 items-center">
-                {navItems.map((item) => (
+
+                {navItems.map(item => (
+
                   <button
                     key={item.href}
                     onClick={() => scrollTo(item.href)}
@@ -267,23 +246,19 @@ export default function Navbar() {
                   >
                     {item.name}
                   </button>
+
                 ))}
+
               </nav>
 
-              <a
-                href="/Resume-Vishnurat-Kadagadakai.pdf"
-                target="_blank"
-                className="
-                  mt-16 self-center px-10 py-4 text-xl font-semibold text-white
-                  rounded-full bg-gradient-to-r from-[#4F7DFF] to-[#7C5CFF]
-                "
-              >
-                Resume →
-              </a>
             </div>
+
           </motion.div>
+
         )}
+
       </AnimatePresence>
+
     </>
   )
 }
