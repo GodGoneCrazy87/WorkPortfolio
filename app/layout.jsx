@@ -7,13 +7,22 @@ const inter = Inter({
 })
 
 export const metadata = {
+  keywords: [
+  'Product Engineer',
+  'Full Stack Developer',
+  'Next.js Developer',
+  'React Developer',
+  'Node.js',
+  'MongoDB',
+  'Frontend Engineer',
+],
   title: {
-    default: 'Vishnurat Kadagadakai — Front-End Engineer',
+    default: 'Vishnurat Kadagadakai — Product Engineer',
     template: '%s · Vishnurat Kadagadakai',
   },
 
   description:
-    'Front-end engineer building production-grade UI systems, scalable interfaces, and high-performance web applications with React and Next.js.',
+    'Product engineer building production-grade systems, scalable interfaces, and full-stack applications using Next.js, Node.js, and MongoDB.',
 
   metadataBase: new URL('https://vishnurat-kadagadakai.vercel.app'),
 
@@ -28,9 +37,9 @@ export const metadata = {
   /* ---------- OPEN GRAPH ---------- */
 
   openGraph: {
-    title: 'Vishnurat Kadagadakai — Front-End Engineer',
+    title: 'Vishnurat Kadagadakai — Product Engineer',
     description:
-      'Production-focused front-end engineer specializing in scalable UI systems and interaction design.',
+      'Built systems used by 5000+ users. Building VAYU — a gamified productivity and identity platform.',
 
     url: 'https://vishnurat-kadagadakai.vercel.app',
     siteName: 'Vishnurat Portfolio',
@@ -45,9 +54,9 @@ export const metadata = {
 
   twitter: {
     card: 'summary_large_image',
-    title: 'Vishnurat Kadagadakai — Front-End Engineer',
+    title: 'Vishnurat Kadagadakai — Product Engineer',
     description:
-      'Production-focused front-end engineer building scalable UI systems.',
+      'Full-stack product engineer building scalable systems and real-world applications.',
 
     images: ['/og-image.png'],
   },
