@@ -17,9 +17,9 @@ const projects = [
     description:
       'Gamified identity and productivity platform combining habit tracking, progression systems, and behavioral analytics dashboards.',
     bullets: [
-'Architected full-stack system with Next.js APIs and MongoDB',
-'Built habit tracking, XP progression, and identity systems',
-'Designed scalable dashboard UI and analytics modules',
+  'Full-stack system with Next.js + MongoDB',
+  'Habit tracking, XP progression, identity systems',
+  'Scalable dashboard + analytics modules',
 ],
     stack: [
       'Next.js',
@@ -104,6 +104,7 @@ const TRANSITION = {
 export default function Projects() {
   const router = useRouter()
   const [activeSlug, setActiveSlug] = useState(null)
+
   useEffect(() => {
   projects.forEach((p) => {
     router.prefetch(`/case-studies/${p.slug}`)
@@ -138,14 +139,18 @@ img.src = p.image
       <div className="relative max-w-[1400px] mx-auto px-6 sm:px-10 py-24 sm:py-28">
 
         {/* HEADER */}
-        <div className="max-w-4xl mb-6">
-  <p className="text-sm font-medium text-purple-400 mb-1">
-    Selected Work
-  </p>
+        <div className="max-w-4xl mb-12">
+ <p className="text-sm font-medium text-purple-400 mb-3">
+  Selected Work
+</p>
 
-  <h2 className="text-3xl sm:text-4xl font-semibold text-white whitespace-nowrap">
-    Projects built for real users and production systems
-  </h2>
+<h2 className="text-3xl sm:text-4xl font-semibold text-white">
+  Projects built for real users and production systems
+</h2>
+
+<p className="text-gray-400 mt-2 text-sm max-w-2xl">
+  Real-world products focused on scalability, interaction design, and production performance.
+</p>
 </div>
 
         {/* GRID */}
@@ -153,15 +158,13 @@ img.src = p.image
 
           {projects.map((project) => {
             const isActive = activeSlug === project.slug
-            const isHidden = activeSlug && !isActive
-
+            const isDimmed = activeSlug && !isActive
+            
             return (
               <motion.article
   key={project.slug}
   onClick={() => {
     if (activeSlug) return
-
-    setActiveSlug(project.slug)
 
     setTimeout(() => {
       router.push(`/case-studies/${project.slug}`)
@@ -169,46 +172,53 @@ img.src = p.image
   }}
 
   animate={{
-  opacity: isHidden ? 0 : 1,
-  scale: isActive ? 1.12 : 1,
-  y: isActive ? -8 : 0,
+  scale: isActive ? 1.08 : 1,
+  opacity: isDimmed ? 0.35 : 1,
+  y: isActive ? -6 : 0,
 }}
+
 whileHover={{
-  y: -6,
-  scale: 1.03
+  scale: 1.04,
 }}
 
   transition={{
     duration: TRANSITION.in,
     ease: TRANSITION.ease,
   }}
+  onMouseEnter={() => setActiveSlug(project.slug)}
+onMouseLeave={() => setActiveSlug(null)}
 
-                className={`
-group cursor-pointer hover:-translate-y-[3px] select-none
+              className={`
+group cursor-pointer select-none
 relative
 rounded-2xl
 border border-gray-800
 bg-[#121018]
 overflow-hidden
+h-full flex flex-col
 hover:border-purple-500/40
 hover:shadow-lg hover:shadow-purple-500/10
 transition-all
 ${project.slug === "vayu" ? "ring-1 ring-purple-500/30" : ""}
 `}
 >
-
+<div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300 pointer-events-none">
+  <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-transparent" />
+</div>
               {/* IMAGE */}
-              <div className="relative h-[260px] w-full overflow-hidden">
+              <div className="relative aspect-[16/10] w-full bg-[#0b0f13] flex items-center justify-center overflow-hidden hover:shadow-[0_0_40px_rgba(168,85,247,0.15)]">
                 <motion.div
-                  whileHover={{  y: -8, scale: 1.08 }}
+                  whileHover={{ scale: 1.04 }}
                   transition={{ duration: 0.35, ease: 'easeOut' }}
                   className="h-full w-full"
                 >
                   <Image
+  priority
+  quality={90}
                     src={project.image}
                     alt={project.title}
                     fill
-                    className="object-cover"
+                    className="object-contain bg-[#0b0f13] transition-transform duration-500 group-hover:scale-[1.06]"
                   />
                 </motion.div>
                 <div className="absolute inset-0 bg-gradient-to-t from-[#121018] via-transparent to-transparent" />
@@ -217,16 +227,15 @@ ${project.slug === "vayu" ? "ring-1 ring-purple-500/30" : ""}
               {/* CONTENT */}
               <div className="p-6 flex flex-col h-full">
                 {/* TITLE + ICONS */}
-                <div className="flex items-start justify-between gap-4">
+<div className="flex items-start justify-between gap-4">
 
   <div className="min-w-0">
-    <h3 className="text-lg font-semibold text-white">
-      {project.title}
-    </h3>
-
-    <p className="text-sm text-purple-400 whitespace-nowrap">
-      {project.subtitle}
-    </p>
+    <h3 className="text-lg font-semibold text-white leading-tight">
+  {project.title}
+  <span className="block mt-1 text-sm font-medium text-purple-400 whitespace-nowrap">
+    {project.subtitle}
+  </span>
+</h3>
   </div>
 
   <div className="flex items-center gap-3 pt-1 shrink-0">
@@ -249,18 +258,14 @@ ${project.slug === "vayu" ? "ring-1 ring-purple-500/30" : ""}
 
 </div>
 
-                <p className="text-gray-400 text-sm leading-relaxed">
-                  {project.description}
-                </p>
-
-                <ul className="text-sm text-gray-300 space-y-[2px]">
-                  {project.bullets.map((b) => (
+<ul className="text-sm text-gray-300 space-y-1 mt-3">
+                    {project.bullets.map((b) => (
                     <li key={b}>• {b}</li>
                   ))}
                 </ul>
 
                 {/* STACK */}
-                <div className="flex flex-wrap gap-2 pt-2">
+                <div className="flex flex-wrap gap-2 mt-4">
                   {project.stack.map((tech) => (
                     <span
                       key={tech}
@@ -276,7 +281,7 @@ ${project.slug === "vayu" ? "ring-1 ring-purple-500/30" : ""}
                 </div>
 
                 {/* VIEW PROJECT */}
-<div className="mt-auto pt-4">
+<div className="mt-auto pt-6">
   <span className="relative inline-block text-sm font-semibold text-purple-400">
 
     {project.slug === "vayu"
