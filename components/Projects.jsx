@@ -19,7 +19,9 @@ const projects = [
     bullets: [
   'Full-stack system with Next.js + MongoDB',
   'Habit tracking, XP progression, identity systems',
+  'Behavior-driven feedback loops for consistency',
   'Scalable dashboard + analytics modules',
+  'End-to-end product from design → deployment',
 ],
     stack: [
       'Next.js',
@@ -42,10 +44,12 @@ const projects = [
     subtitle: 'Production Web3 Platform',
     description:
       'Production Web3 review platform where user credibility is minted as NFTs, used by 5000+ active users.',
-    bullets: [
-'Built contributor dashboard and profile systems',
-'Optimized API fetching reducing render time by 40%',
-'Shipped production Web3 features for real users',
+bullets: [
+  'Built contributor dashboard and profile systems',
+  'Optimized API fetching reducing render time by 40%',
+  'Shipped production Web3 features for real users',
+  'Designed scalable data flow for NFT-based credibility',
+  'Collaborated across frontend and backend systems',
 ],
     stack: ['Node.js', 'React', 'Tailwind', 'Web3', 'Figma'],
     image: '/deflix0.png',
@@ -60,10 +64,12 @@ const projects = [
     subtitle: 'Wellness & Stress Analytics Platform',
     description:
       'Biomedical analytics platform visualizing stress signals and wellness metrics through interactive dashboards.',
-    bullets: [
-'Built full-stack analytics dashboards with Next.js',
-'Integrated Python ML pipelines for stress prediction',
-'Designed data visualization systems for biomedical signals',
+bullets: [
+  'Built full-stack analytics dashboards with Next.js',
+  'Integrated Python ML pipelines for stress prediction',
+  'Designed data visualization systems for biomedical signals',
+  'Processed EPI/EEG/ECG data into usable insights',
+  'Delivered award-winning system (Best Project 2025)',
 ],
     stack: [
       'Next.js',
@@ -154,7 +160,7 @@ img.src = p.image
 </div>
 
         {/* GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10 relative z-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 sm:gap-10 relative z-20">
 
           {projects.map((project) => {
             const isActive = activeSlug === project.slug
@@ -164,15 +170,13 @@ img.src = p.image
               <motion.article
   key={project.slug}
   onClick={() => {
-    if (activeSlug) return
-
     setTimeout(() => {
       router.push(`/case-studies/${project.slug}`)
     }, 380)
   }}
 
   animate={{
-  scale: isActive ? 1.08 : 1,
+  scale: isActive ? 1.04 : 1,
   opacity: isDimmed ? 0.35 : 1,
   y: isActive ? -6 : 0,
 }}
@@ -195,20 +199,18 @@ rounded-2xl
 border border-gray-800
 bg-[#121018]
 overflow-hidden
-h-full flex flex-col
+h-auto flex flex-col
 hover:border-purple-500/40
 hover:shadow-lg hover:shadow-purple-500/10
 transition-all
 ${project.slug === "vayu" ? "ring-1 ring-purple-500/30" : ""}
 `}
 >
-<div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300 pointer-events-none">
-  <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-transparent" />
+<div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition duration-500 bg-gradient-to-tr from-transparent via-white/5 to-transparent" >  <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-transparent" />
 </div>
               {/* IMAGE */}
-              <div className="relative aspect-[16/10] w-full bg-[#0b0f13] flex items-center justify-center overflow-hidden hover:shadow-[0_0_40px_rgba(168,85,247,0.15)]">
-                <motion.div
-                  whileHover={{ scale: 1.04 }}
+<div className="relative w-full h-[240px] overflow-hidden bg-[#0b0f13] rounded-t-2xl">                <motion.div
+                  whileHover={{ scale: 1.02 }}
                   transition={{ duration: 0.35, ease: 'easeOut' }}
                   className="h-full w-full"
                 >
@@ -218,54 +220,58 @@ ${project.slug === "vayu" ? "ring-1 ring-purple-500/30" : ""}
                     src={project.image}
                     alt={project.title}
                     fill
-                    className="object-contain bg-[#0b0f13] transition-transform duration-500 group-hover:scale-[1.06]"
-                  />
+className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]"                  />
                 </motion.div>
-                <div className="absolute inset-0 bg-gradient-to-t from-[#121018] via-transparent to-transparent" />
-              </div>
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-t from-[#121018] via-transparent to-transparent"
+                    initial={{ opacity: 0.6 }}
+                    whileHover={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                </div>
 
-              {/* CONTENT */}
-              <div className="p-6 flex flex-col h-full">
-                {/* TITLE + ICONS */}
-<div className="flex items-start justify-between gap-4">
+                {/* CONTENT */}
+                <div className="p-6 flex flex-col  ">
+                  {/* TITLE + ICONS */}
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="min-w-0">
+                      <h3 className="text-lg font-semibold text-white leading-tight">
+                        {project.title}
+                        <span className="block mt-2 text-sm font-medium text-purple-400 whitespace-nowrap">
+                          {project.subtitle}
+                        </span>
+                      </h3>
+                    </div>
 
-  <div className="min-w-0">
-    <h3 className="text-lg font-semibold text-white leading-tight">
-  {project.title}
-  <span className="block mt-1 text-sm font-medium text-purple-400 whitespace-nowrap">
-    {project.subtitle}
-  </span>
-</h3>
-  </div>
+                    <div className="flex items-center gap-3 pt-1 shrink-0">
+                      {project.github && (
+                        <Icon href={project.github} type="github">
+                          <Github size={18} />
+                        </Icon>
+                      )}
 
-  <div className="flex items-center gap-3 pt-1 shrink-0">
-    {project.github && (
-      <Icon href={project.github} type="github">
-        <Github size={18} />
-      </Icon>
-    )}
+                      <Icon href={project.figma} type="figma">
+                        <Figma size={18} />
+                      </Icon>
 
-    <Icon href={project.figma} type="figma">
-      <Figma size={18} />
-    </Icon>
+                      {project.live && (
+                        <Icon href={project.live} type="live">
+                          <ExternalLink size={18} />
+                        </Icon>
+                      )}
+                    </div>
 
-    {project.live && (
-      <Icon href={project.live} type="live">
-        <ExternalLink size={18} />
-      </Icon>
-    )}
-  </div>
-
-</div>
-
-<ul className="text-sm text-gray-300 space-y-1 mt-3">
+                  </div>
+                  <ul className="text-sm text-gray-300 space-y-2 mt-4">
                     {project.bullets.map((b) => (
-                    <li key={b}>• {b}</li>
-                  ))}
-                </ul>
-
+                      <li key={b} className="flex items-start gap-1">
+                        <span className="mt-[1px] text-purple-400">•</span>
+                        <span className="leading-relaxed">{b}</span>
+                      </li>
+                    ))}
+                  </ul>
                 {/* STACK */}
-                <div className="flex flex-wrap gap-2 mt-4">
+                <div className="flex flex-wrap gap-2 mt-5">
                   {project.stack.map((tech) => (
                     <span
                       key={tech}
@@ -281,27 +287,30 @@ ${project.slug === "vayu" ? "ring-1 ring-purple-500/30" : ""}
                 </div>
 
                 {/* VIEW PROJECT */}
-<div className="mt-auto pt-6">
-  <span className="relative inline-block text-sm font-semibold text-purple-400">
+                <motion.div
+                  className="mt-5 pt-3"
+                  whileHover={{ x: 4 }}
+                ><span className="relative inline-block text-sm font-semibold text-purple-400 group-hover:text-purple-300 transition">
+                    {project.slug === "vayu"
+                      ? "View Product →"
+                      : "Read Case Study →"}
 
-    {project.slug === "vayu"
-      ? "View Product →"
-      : "Read Case Study →"}
-
-    <span
-      className="
-      absolute left-0 -bottom-1 h-[2px] w-full
-      bg-purple-500 scale-x-0
-      group-hover:scale-x-100
-      origin-left transition-transform duration-300
-    "
-    />
-  </span>
-</div>
-              </div>
+                    <span
+                  className="
+                  absolute left-0 -bottom-1 h-[2px] w-full
+                  bg-purple-500 scale-x-0
+                  group-hover:scale-x-100
+                  origin-left transition-transform duration-300
+                  group-hover:shadow-[0_0_12px_rgba(168,85,247,0.8)]
+                "
+                />
+                  </span>
+                  </motion.div>
+                  </div>
+            
             </motion.article>
             )
-})}
+          })}
         </div>
       </div>
     </section>
@@ -324,7 +333,11 @@ function Icon({ href, children, type }) {
     <a
       href={href}
       target="_blank"
-      onClick={(e) => e.stopPropagation()}
+      onClick={(e) => {
+  e.stopPropagation()
+  e.preventDefault()
+  window.open(href, '_blank')
+}}
       className={`
         ${colorMap[type]}
         p-1 rounded-full

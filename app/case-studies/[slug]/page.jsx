@@ -18,7 +18,7 @@ const PROJECT_THEMES = {
     border: 'border-orange-400/30',
     arrow: 'text-orange-400',
   },
-  'solo-leveling-journal': {
+  'vayu': {
     glow: 'from-purple-500/25 via-purple-500/10 to-transparent',
     border: 'border-purple-400/30',
     arrow: 'text-purple-400',
@@ -36,7 +36,7 @@ const PAGE_THEMES = {
     glow: 'bg-orange-400/20',
   },
 
-  'solo-leveling-journal': {
+  'vayu': {
     bg: 'from-purple-900/50 via-zinc-900/40 to-black',
     glow: 'bg-purple-500/25',
   },
